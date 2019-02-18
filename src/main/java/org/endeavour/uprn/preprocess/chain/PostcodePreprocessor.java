@@ -5,20 +5,23 @@ import java.util.regex.Pattern;
 
 import org.endeavour.uprn.bean.Address;
 import org.endeavour.uprn.bean.MatcherResult;
-import org.endeavour.uprn.bean.PropertyMatcherResultType;
+import org.endeavour.uprn.bean.Result;
+import org.endeavour.uprn.bean.ResultType;
 import org.endeavour.uprn.match.chain.MatchChain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ValidPostcodeMatcher implements MatchChain {
+public class PostcodePreprocessor implements PreprocessChain {
 
-	Logger logger = LoggerFactory.getLogger(ValidPostcodeMatcher.class);
+	Logger logger = LoggerFactory.getLogger(PostcodePreprocessor.class);
+	
+	private PreprocessChain nextChain;
 
 	final Pattern postcodePattern;
 	
-	final PropertyMatcherResultType propertyMatcherResultType = PropertyMatcherResultType.POSTCODE;
+	final ResultType propertyMatcherResultType = ResultType.POSTCODE;
 
-	public ValidPostcodeMatcher() {
+	public PostcodePreprocessor() {
 		super();
 		
 		//https://regex101.com/r/eX5uW6/1
@@ -27,13 +30,12 @@ public class ValidPostcodeMatcher implements MatchChain {
 		postcodePattern = Pattern.compile(patternString);
 	}
 
-	private MatchChain nextChain;
 
-	public void setNextChain(MatchChain nextChain) {
+	public void setNextChain(PreprocessChain nextChain) {
 		this.nextChain = nextChain;
 	}
 
-	public void match(Address address, MatcherResult propertyMatcherResult) {
+	public void process(Address address, Result result) {
 
 		String postcode = address.getPostcode();
 
@@ -41,7 +43,7 @@ public class ValidPostcodeMatcher implements MatchChain {
 
 		if (address.getPostcode() == null) {
 
-			propertyMatcherResult.setFailure("Postcode is null", propertyMatcherResultType);
+			result.setFailure("Postcode is null", propertyMatcherResultType, getPhase());
 
 			return;
 		}
@@ -50,15 +52,15 @@ public class ValidPostcodeMatcher implements MatchChain {
 		boolean matches = matcher.matches();
 
 		if (!matches) {
-			propertyMatcherResult.setFailure("Postcode doesn't match regex", propertyMatcherResultType);
+			result.setFailure("Postcode doesn't match regex", propertyMatcherResultType, getPhase());
 			return;
 		}
 
 		logger.debug("Postcode is valid. Continuing chain");
 		
-		propertyMatcherResult.setSuccess("Postcode is valid", propertyMatcherResultType);
-
-		nextChain.match(address, propertyMatcherResult);
+		if(nextChain != null) {
+			nextChain.process(address, result);
+		}
 
 	}
 

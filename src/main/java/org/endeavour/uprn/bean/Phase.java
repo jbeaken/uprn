@@ -1,17 +1,16 @@
 package org.endeavour.uprn.bean;
 
-public enum PropertyMatcherResultType {
-	POSTCODE("Postcode");
+public enum Phase {
 	
+	MATCHING("Matching"), PREPROCESSING("Preprocessing");
 	
 	String displayName;
 	
-	PropertyMatcherResultType(String displayName) {
+	Phase(String displayName) {
 		this.displayName = displayName;
 	}
 	
 	public String getDisplayName() {
 		return displayName;
 	}
-
 }

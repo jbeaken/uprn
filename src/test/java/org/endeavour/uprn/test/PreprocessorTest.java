@@ -1,22 +1,26 @@
 package org.endeavour.uprn.test;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.endeavour.uprn.bean.Address;
-import org.endeavour.uprn.bean.PreprocessorResult;
-import org.endeavour.uprn.bean.MatcherResult;
-import org.endeavour.uprn.bean.UPRNPreprocessor;
-import org.endeavour.uprn.engine.AddressPreprocessor;
-import org.endeavour.uprn.match.engine.PropertyMatcher;
-import org.endeavour.uprn.match.engine.UPRNMatcher;
+import org.endeavour.uprn.bean.Phase;
+import org.endeavour.uprn.bean.Result;
+import org.endeavour.uprn.bean.ResultType;
+
+import org.endeavour.uprn.factory.MatcherFactory;
+
+import org.junit.Before;
 import org.junit.Test;
 
 
 public class PreprocessorTest {
 	
-	PropertyMatcher propertyMatcher = new UPRNMatcher();
+	MatcherFactory matcherFactory;
 	
-	AddressPreprocessor uprnPreprocessor = new UPRNPreprocessor();
+	@Before
+	public void init() {
+		matcherFactory = MatcherFactory.build();
+	}
 	
     @Test
     public void testNullPostocde() {
@@ -26,13 +30,14 @@ public class PreprocessorTest {
     		.postcode( null )
     		.build();
     	
-    	PreprocessorResult addressPreprocessorResult = uprnPreprocessor.process(address);
+    	Result result = matcherFactory.match(address);
     	
-    	MatcherResult propertyMatcherResult = propertyMatcher.match(address);
+    	assertThat(result.isFailure()).isTrue();
+    	assertThat(result.isSuccess()).isFalse();
+    	assertThat(result.getPhase()).isEqualTo( Phase.PREPROCESSING );
     	
-    	assertThat(propertyMatcherResult.getMatched()).isFalse();
-    	
-    	assertThat(propertyMatcherResult.getMessage()).isEqualTo("Postcode is null");
+    	assertThat(result.getType()).isEqualTo(ResultType.POSTCODE);
+    	assertThat(result.getMessage()).isEqualTo("Postcode is null");
     }
     
     @Test
@@ -43,13 +48,12 @@ public class PreprocessorTest {
     		.postcode( "E2 6HL" )
     		.build();
     	
-    	PreprocessorResult addressPreprocessorResult = uprnPreprocessor.process(address);
+    	Result result = matcherFactory.match(address);
     	
-    	MatcherResult propertyMatcherResult = propertyMatcher.match(address);
+    	assertThat(result.isSuccess()).isTrue();
+    	assertThat(result.isFailure()).isFalse();
     	
-    	assertThat(propertyMatcherResult.getMatched()).isTrue();
-    	
-    	assertThat(propertyMatcherResult.getMessage()).isEqualTo("Postcode is valid");
+//    	assertThat(result.getMessage()).isEqualTo("Postcode is valid");
     }    
     
     @Test
@@ -60,12 +64,13 @@ public class PreprocessorTest {
     		.postcode( "EE 6HL" )
     		.build();
     	
-    	PreprocessorResult addressPreprocessorResult = addressPreprocessor.process(address);
+    	Result result = matcherFactory.match(address);
     	
-    	MatcherResult propertyMatcherResult = propertyMatcher.match(address);
+    	assertThat(result.isFailure()).isTrue();
+    	assertThat(result.isSuccess()).isFalse();
+    	assertThat(result.getPhase()).isEqualTo( Phase.PREPROCESSING );
     	
-    	assertThat(propertyMatcherResult.getMatched()).isFalse();
-    	
-    	assertThat(propertyMatcherResult.getMessage()).isEqualTo("Postcode doesn't match regex");
+    	assertThat(result.getMessage()).isEqualTo("Postcode doesn't match regex");
     }     
 }
+

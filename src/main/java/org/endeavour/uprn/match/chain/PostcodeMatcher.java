@@ -1,7 +1,7 @@
 package org.endeavour.uprn.match.chain;
 
 import org.endeavour.uprn.bean.Address;
-import org.endeavour.uprn.bean.MatcherResult;
+import org.endeavour.uprn.bean.Result;
 
 public class PostcodeMatcher implements MatchChain {
 	
@@ -13,7 +13,7 @@ public class PostcodeMatcher implements MatchChain {
 	}
 
 
-	public void match(Address address, MatcherResult propertyMatcherResult) {
+	public void match(Address address, Result result) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -20,12 +20,12 @@ public class MatcherResult {
 	
 	private String message;
 	
-	private PropertyMatcherResultType type;
+	private ResultType type;
 	
 	@ToString.Exclude
 	Logger logger = LoggerFactory.getLogger(MatcherResult.class);
 
-	public void setFailure(String message, PropertyMatcherResultType type) {
+	public void setFailure(String message, ResultType type) {
 		this.matched = false;
 		this.type = type;
 		this.message = message;
@@ -33,7 +33,7 @@ public class MatcherResult {
 		logger.debug(this.toString());
 	}
 	
-	public void setSuccess(String message, PropertyMatcherResultType type) {
+	public void setSuccess(String message, ResultType type) {
 		this.matched = true;
 		this.type = type;
 		this.message = message;

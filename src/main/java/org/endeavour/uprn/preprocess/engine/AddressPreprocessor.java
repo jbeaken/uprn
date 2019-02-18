@@ -1,10 +1,11 @@
-package org.endeavour.uprn.engine;
+package org.endeavour.uprn.preprocess.engine;
 
 import org.endeavour.uprn.bean.Address;
 import org.endeavour.uprn.bean.PreprocessorResult;
+import org.endeavour.uprn.bean.Result;
 
 public interface AddressPreprocessor {
 	
 	
-	public PreprocessorResult process(Address address);
+	public Result process(Address address);
 }
