@@ -6,8 +6,8 @@ import {ControlsModule} from "eds-angular4/dist/controls";
 import {ModuleStateService} from "eds-angular4/dist/common";
 import {DialogsModule, LoggerService} from 'eds-angular4';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {PropertyServiceComponent} from './property-service/property-service.component';
-import {PropertyServiceService} from './property-service/property-service.service';
+import {PropertyMatcherComponent} from './property-matcher/property-matcher.component';
+import {PropertyMatcherService} from './property-matcher/property-matcher.service';
 
 @NgModule({
   imports: [
@@ -18,8 +18,8 @@ import {PropertyServiceService} from './property-service/property-service.servic
     ToastModule.forRoot(),
     ControlsModule
   ],
-  declarations: [PropertyServiceComponent],
-  entryComponents: [PropertyServiceComponent],
-  providers: [PropertyServiceService, LoggerService, ModuleStateService]
+  declarations: [PropertyMatcherComponent],
+  entryComponents: [PropertyMatcherComponent],
+  providers: [PropertyMatcherService, LoggerService, ModuleStateService]
 })
-export class PropertyServiceModule { }
+export class PropertyMatcherModule { }

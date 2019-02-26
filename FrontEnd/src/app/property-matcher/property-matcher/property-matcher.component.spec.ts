@@ -1,14 +1,14 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PropertyServiceComponent } from './property-service.component';
+import { PropertyMatcherComponent } from './property-matcher.component';
 import {CommonModule} from '@angular/common';
 import {DialogsModule} from 'eds-angular4';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {By} from '@angular/platform-browser';
 
-describe('PropertyServiceComponent', () => {
-  let component: PropertyServiceComponent;
-  let fixture: ComponentFixture<PropertyServiceComponent>;
+describe('PropertyMatcherComponent', () => {
+  let component: PropertyMatcherComponent;
+  let fixture: ComponentFixture<PropertyMatcherComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -17,13 +17,13 @@ describe('PropertyServiceComponent', () => {
         DialogsModule,
         NgbModule.forRoot()
       ],
-      declarations: [ PropertyServiceComponent ]
+      declarations: [ PropertyMatcherComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PropertyServiceComponent);
+    fixture = TestBed.createComponent(PropertyMatcherComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

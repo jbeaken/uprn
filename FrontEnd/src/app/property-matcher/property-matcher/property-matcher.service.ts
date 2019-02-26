@@ -4,7 +4,7 @@ import {Observable} from 'rxjs/Observable';
 import {Address} from "./models/Address";
 
 @Injectable()
-export class PropertyServiceService {
+export class PropertyMatcherService {
 
   Address: Address;
 

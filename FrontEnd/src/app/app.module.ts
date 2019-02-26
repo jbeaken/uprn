@@ -9,7 +9,7 @@ import {Http, HttpModule, RequestOptions, XHRBackend} from '@angular/http';
 import {LayoutComponent} from 'eds-angular4/dist/layout/layout.component';
 import {LayoutModule, AbstractMenuProvider, UserManagerNotificationService} from 'eds-angular4';
 import {AppMenuService} from './app-menu.service';
-import {PropertyServiceModule} from './property-service/property-service.module';
+import {PropertyMatcherModule} from './property-matcher/property-matcher.module';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FormsModule} from '@angular/forms';
 
@@ -21,7 +21,7 @@ import {FormsModule} from '@angular/forms';
     BrowserAnimationsModule,
     HttpModule,
     LayoutModule,
-    PropertyServiceModule,
+    PropertyMatcherModule,
     RouterModule.forRoot(AppMenuService.getRoutes(), {useHash: true}),
     NgbModule.forRoot(),
     ToastModule.forRoot(),

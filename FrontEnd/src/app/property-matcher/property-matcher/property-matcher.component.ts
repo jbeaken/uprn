@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {LoggerService, MessageBoxDialog} from 'eds-angular4';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {PropertyServiceService} from './property-service.service';
+import {PropertyMatcherService} from './property-matcher.service';
 import {ToastsManager} from 'ng2-toastr';
 import {ModuleStateService} from 'eds-angular4/dist/common';
 import {Router} from '@angular/router';
@@ -9,11 +9,11 @@ import {Address} from "./models/Address";
 import {FormsModule} from '@angular/forms';
 
 @Component({
-  selector: 'app-property-service',
-  templateUrl: './property-service.component.html',
-  styleUrls: ['./property-service.component.css']
+  selector: 'app-property-matcher',
+  templateUrl: './property-matcher.component.html',
+  styleUrls: ['./property-matcher.component.css']
 })
-export class PropertyServiceComponent implements OnInit {
+export class PropertyMatcherComponent implements OnInit {
 
   address: Address  = new Address("", "", "", "", "");
 
@@ -30,7 +30,7 @@ export class PropertyServiceComponent implements OnInit {
 
   constructor(private modal: NgbModal,
               private log: LoggerService,
-              private service: PropertyServiceService,
+              private service: PropertyMatcherService,
               private state: ModuleStateService,
               private router: Router,
               public toastr: ToastsManager, vcr: ViewContainerRef) {
