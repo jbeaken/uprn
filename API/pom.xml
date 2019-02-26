@@ -5,10 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <relativePath>../pom.xml</relativePath>
+      <relativePath>../pom.xml</relativePath>
     	<groupId>org.endeavourhealth.propertymatcher</groupId>
     	<artifactId>PropertyMatcher</artifactId>
-        <version>1.0-SNAPSHOT</version>
+      <version>1.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>API</artifactId>
@@ -17,7 +17,7 @@
 
     <properties>
         <!-- TODO change SkeletonAPIandUI to your repo name -->
-        <sonar.projectKey>endeavourhealth-discovery_SkeletonAPIandUI::API</sonar.projectKey>
+        <sonar.projectKey>endeavourhealth-discovery_PropertyMatcher::API</sonar.projectKey>
         <sonar.exclusions>**/docs/**/*</sonar.exclusions>
     </properties>
 
@@ -30,6 +30,11 @@
             <version>${eds-api.version}</version>
         </dependency>
 
+        <dependency>
+          <groupId>org.endeavourhealth.propertymatcher</groupId>
+          <artifactId>MatcherLibrary</artifactId>
+          <version>1.0-SNAPSHOT</version>
+        </dependency>
         <dependency>
             <groupId>org.endeavourhealth.common</groupId>
             <artifactId>core</artifactId>
@@ -164,16 +169,7 @@
             <artifactId>metrics-jvm</artifactId>
             <version>${dropwizard-metrics.version}</version>
         </dependency>
-        <dependency>
-            <groupId>io.astefanutti.metrics.aspectj</groupId>
-            <artifactId>metrics-aspectj</artifactId>
-            <version>${aspectj-metrics.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjrt</artifactId>
-            <version>${aspectj.version}</version>
-        </dependency>
+
         <!-- End DropWizard -->
     </dependencies>
 
@@ -187,27 +183,6 @@
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>aspectj-maven-plugin</artifactId>
-                <version>1.10</version>
-                <configuration>
-                    <complianceLevel>${java.version}</complianceLevel>
-                    <aspectLibraries>
-                        <aspectLibrary>
-                            <groupId>io.astefanutti.metrics.aspectj</groupId>
-                            <artifactId>metrics-aspectj</artifactId>
-                        </aspectLibrary>
-                    </aspectLibraries>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
