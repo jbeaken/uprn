@@ -1,0 +1,137 @@
+<div class="module">
+  <div class="container-fluid">
+
+    <div class="module-heading">
+      Property Matcher
+    </div>
+
+    <!-- split into md-5 and md-7 cards -->
+    <div class="module-body">
+
+      <div class="row">
+
+        <div class="col-md-5">
+          <div class="card">
+
+            <div class="card-header">
+              Address to match
+            </div>
+
+            <div class="card-body">
+
+              <div class="row">
+                <div class="col-md-12">
+
+                  <!-- Form group -->
+                  <div class="form-group">
+                    <label class="form-control-label required-field">Line 1</label>   <!-- Required field -->
+                    <input type="text" class="form-control" placeholder="Line 1" [value]="message" name="message">
+                  </div>
+
+                  <!-- Form group -->
+                  <div class="form-group">
+                    <label class="form-control-label">Line 2</label>   <!-- Required field -->
+                    <input type="text" class="form-control" placeholder="Line 2" [value]="message" name="message">
+                  </div>
+
+                  <!-- Form group -->
+                  <div class="form-group">
+                    <label class="form-control-label">Line 3</label>   <!-- Required field -->
+                    <input type="text" class="form-control" placeholder="Line 3" [value]="message" name="message">
+                  </div>
+
+                  <!-- Form group -->
+                  <div class="form-group">
+                    <label class="form-control-label">Line 4</label>   <!-- Required field -->
+                    <input type="text" class="form-control" placeholder="Line 4" [value]="message" name="message">
+                  </div>
+
+                </div><!-- /col-md-12 -->
+
+                <div class="col-md-12">
+                  <div class="scroll-box-450">
+                    <!-- Table -->
+                    <table class="table table-striped table-sm table-hover">
+                      <thead>
+                      <tr class="d-flex">
+                        <th class="col-3">Dataset Id</th>
+                        <th class="col-8">Dataset Name</th>
+                        <th class="col-1"></th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr class="d-flex show-child-on-hover" *ngFor="let dataset of filteredDatasets"
+                          (click)="selection = dataset" [class.selection]="selection == dataset">
+                        <td class="col-3">{{dataset.datasetId}}</td>
+                        <td class="col-8">{{dataset.definition.name}}</td>
+                        <td class="col-1"></td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div><!-- /col-md-12 -->
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-7">
+          <div class="card">
+            <div class="card-header">
+              Address Matching Results
+
+              <!-- "Pulled" button group -->
+              <div class="pull-right">
+                <button type="button" class="btn btn-success" (click)="print(selection)">Print</button>
+                <button type="button" class="btn btn-danger" (click)="delete(selection)">Delete</button>
+              </div>
+
+            </div>
+
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="card">
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <td class="col-1">
+                  <div class="row"><br></div>
+                </td>
+                <div class="col-md-12">
+                  <div class="scroll-box-450">
+                    <!-- Table -->
+                    <table class="table table-striped table-sm">
+                      <thead>
+                      <tr class="d-flex">
+                        <th class="col-11">Dataset Files</th>
+                        <th class="col-1"></th>
+                      </tr>
+                      </thead>
+
+                      <tbody>
+                      <tr class="d-flex show-child-on-hover" *ngFor="let file of selection.definition.extract">
+                        <td class="col-1"></td>
+                        <td class="col-10"><strong>{{file.type | uppercase}} FILE</strong>
+                        </td>
+                        <td class="col-1"></td>
+                      </tr>
+                      </tbody>
+
+                    </table>
+
+                  </div>
+                </div><!-- /col-md-12 --> 
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

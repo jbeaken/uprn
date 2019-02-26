@@ -6,16 +6,15 @@
 
     <parent>
         <relativePath>../pom.xml</relativePath>
-        <groupId>org.endeavourhealth.propertymatcher</groupId>
-        <artifactId>PropertyMatcher</artifactId>
+        <groupId>org.endeavourhealth.propertyservice</groupId>
+        <artifactId>PropertyService</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>FrontEnd</artifactId>
 
     <properties>
-      <!-- TODO change SkeletonAPIandUI to your repo name -->
-      <sonar.projectKey>endeavourhealth-discovery_SkeletonAPIandUI::FrontEnd</sonar.projectKey>
+      <sonar.projectKey>endeavourhealth-discovery_PropertyService::FrontEnd</sonar.projectKey>
       <sonar.sources>src</sonar.sources>
       <sonar.typescript.tsconfigPath>tsconfig.json</sonar.typescript.tsconfigPath>
       <sonar.ts.tslint.configPath>tslint.json</sonar.ts.tslint.configPath>

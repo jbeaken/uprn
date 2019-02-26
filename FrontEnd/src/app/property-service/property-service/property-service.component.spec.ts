@@ -1,14 +1,14 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SettingsComponent } from './settings.component';
+import { PropertyServiceComponent } from './property-service.component';
 import {CommonModule} from '@angular/common';
 import {DialogsModule} from 'eds-angular4';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {By} from '@angular/platform-browser';
 
-describe('SettingsComponent', () => {
-  let component: SettingsComponent;
-  let fixture: ComponentFixture<SettingsComponent>;
+describe('PropertyServiceComponent', () => {
+  let component: PropertyServiceComponent;
+  let fixture: ComponentFixture<PropertyServiceComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -17,13 +17,13 @@ describe('SettingsComponent', () => {
         DialogsModule,
         NgbModule.forRoot()
       ],
-      declarations: [ SettingsComponent ]
+      declarations: [ PropertyServiceComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SettingsComponent);
+    fixture = TestBed.createComponent(PropertyServiceComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
