@@ -44,6 +44,7 @@
     <modules>
         <module>API</module>
         <module>FrontEnd</module>
+        <module>Library</module>
     </modules>
 
     <repositories>
