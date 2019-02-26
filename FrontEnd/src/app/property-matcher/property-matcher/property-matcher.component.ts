@@ -38,24 +38,12 @@ export class PropertyMatcherComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.service.getList()
-    //   .subscribe(
-    //     result => {
-    //       this.datasets = result;
-    //       let val: any;
-    //       for (let i = 0; i < this.datasets.length; i++) {
-    //         val = this.datasets[i].definition;
-    //         this.datasets[i].definition = JSON.parse(val);
-    //         if (this.service.getSelectedDataset()) {
-    //           this.selection = this.service.getSelectedDataset();
-    //         } else {
-    //           this.selection = this.datasets[0];
-    //         }
-    //         this.filteredDatasets = this.datasets;
-    //         // console.log(this.selection);
-    //       }
-    //     },
-    //   );
+    this.service.getList()
+      .subscribe(
+        result => {
+            console.log( result )
+        },
+      );
   }
 
   onSubmit() {

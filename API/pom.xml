@@ -16,7 +16,7 @@
     <packaging>war</packaging>
 
     <properties>
-        <!-- TODO change SkeletonAPIandUI to your repo name -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <sonar.projectKey>endeavourhealth-discovery_PropertyMatcher::API</sonar.projectKey>
         <sonar.exclusions>**/docs/**/*</sonar.exclusions>
     </properties>

@@ -11,7 +11,7 @@ export class PropertyMatcherService {
   constructor(private http: Http) { }
 
   getList(): Observable<Address[]> {
-    return this.http.get('/api/PropertyService/list')
+    return this.http.get('/api/matcher/address?line1=l1&line2=l2&line3=l3')
       .map((response) => response.json());
   }
 
