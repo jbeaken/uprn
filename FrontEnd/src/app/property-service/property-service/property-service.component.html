@@ -21,54 +21,41 @@
 
               <div class="row">
                 <div class="col-md-12">
-
+                  <form (ngSubmit)="onSubmit()" #addressForm="ngForm">
                   <!-- Form group -->
                   <div class="form-group">
                     <label class="form-control-label required-field">Line 1</label>   <!-- Required field -->
-                    <input type="text" class="form-control" placeholder="Line 1" [value]="message" name="message">
+                    <input type="text" class="form-control" placeholder="Line 1" [(ngModel)]="address.line1" name="line1">
                   </div>
 
                   <!-- Form group -->
                   <div class="form-group">
                     <label class="form-control-label">Line 2</label>   <!-- Required field -->
-                    <input type="text" class="form-control" placeholder="Line 2" [value]="message" name="message">
+                    <input type="text" class="form-control" placeholder="Line 2" [(ngModel)]="address.line2" name="line2">
                   </div>
 
                   <!-- Form group -->
                   <div class="form-group">
                     <label class="form-control-label">Line 3</label>   <!-- Required field -->
-                    <input type="text" class="form-control" placeholder="Line 3" [value]="message" name="message">
+                    <input type="text" class="form-control" placeholder="Line 3" [(ngModel)]="address.line3" name="line3">
                   </div>
 
                   <!-- Form group -->
                   <div class="form-group">
                     <label class="form-control-label">Line 4</label>   <!-- Required field -->
-                    <input type="text" class="form-control" placeholder="Line 4" [value]="message" name="message">
+                    <input type="text" class="form-control" placeholder="Line 4" [(ngModel)]="address.line4" name="line4">
                   </div>
 
-                </div><!-- /col-md-12 -->
-
-                <div class="col-md-12">
-                  <div class="scroll-box-450">
-                    <!-- Table -->
-                    <table class="table table-striped table-sm table-hover">
-                      <thead>
-                      <tr class="d-flex">
-                        <th class="col-3">Dataset Id</th>
-                        <th class="col-8">Dataset Name</th>
-                        <th class="col-1"></th>
-                      </tr>
-                      </thead>
-                      <tbody>
-                      <tr class="d-flex show-child-on-hover" *ngFor="let dataset of filteredDatasets"
-                          (click)="selection = dataset" [class.selection]="selection == dataset">
-                        <td class="col-3">{{dataset.datasetId}}</td>
-                        <td class="col-8">{{dataset.definition.name}}</td>
-                        <td class="col-1"></td>
-                      </tr>
-                      </tbody>
-                    </table>
+                  <div class="pull-right">
+                    <button type="submit" [disabled]="!addressForm.form.valid" class="btn btn-danger">Match</button>
                   </div>
+
+                </form>
+
+                <div [hidden]="!submitted">
+                  {{address | json}}
+                </div>
+
                 </div><!-- /col-md-12 -->
 
               </div>
@@ -91,44 +78,38 @@
 
             <div class="card-body">
               <div class="row">
-                <div class="col-md-12">
-                  <div class="row">
-                    <div class="col-md-12">
-                      <div class="card">
 
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <td class="col-1">
-                  <div class="row"><br></div>
-                </td>
                 <div class="col-md-12">
                   <div class="scroll-box-450">
                     <!-- Table -->
-                    <table class="table table-striped table-sm">
+                    <table class="table table-striped table-sm table-hover">
                       <thead>
-                      <tr class="d-flex">
-                        <th class="col-11">Dataset Files</th>
-                        <th class="col-1"></th>
-                      </tr>
+                        <tr class="d-flex">
+                          <th class="col-1">Id</th>
+                          <th class="col-4">Name</th>
+                          <th class="col-6">Description</th>
+                          <th class="col-1"></th>
+                        </tr>
                       </thead>
-
                       <tbody>
-                      <tr class="d-flex show-child-on-hover" *ngFor="let file of selection.definition.extract">
-                        <td class="col-1"></td>
-                        <td class="col-10"><strong>{{file.type | uppercase}} FILE</strong>
-                        </td>
-                        <td class="col-1"></td>
-                      </tr>
+                        <tr class="d-flex show-child-on-hover" *ngFor="let item of tableData" (click)="selection = item" [class.selection]="selection == item">
+                          <td class="col-1">{{item.id}}</td>
+                          <td class="col-4">{{item.name}}</td>
+                          <td class="col-6">{{item.description}}</td>
+                          <td class="col-1">
+                            <div class="pull-right child-to-show">
+                              <button type="button" class="btn btn-xs btn-success"><em class="fa fa-pencil"></em></button>
+                              <button type="button" class="btn btn-xs btn-danger"><em class="fa fa-trash"></em></button>
+                            </div>
+                          </td>
+                        </tr>
                       </tbody>
-
                     </table>
 
                   </div>
-                </div><!-- /col-md-12 --> 
+                </div><!-- /col-md-12 -->
               </div>
-            </div>
+            </div><!-- /card-body -->
           </div>
         </div>
       </div>

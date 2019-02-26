@@ -6,6 +6,7 @@ import {ToastsManager} from 'ng2-toastr';
 import {ModuleStateService} from 'eds-angular4/dist/common';
 import {Router} from '@angular/router';
 import {Address} from "./models/Address";
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-property-service',
@@ -14,7 +15,18 @@ import {Address} from "./models/Address";
 })
 export class PropertyServiceComponent implements OnInit {
 
-  address: Address;
+  address: Address  = new Address("", "", "", "", "");
+
+  tableData: any[] = [
+    {id: 1, name: 'John Smith', description: 'Senior consultant'},
+    {id: 2, name: 'Jane Doe', description: 'General practitioner'},
+    {id: 3, name: 'Dave Jones', description: 'Hospital porter'},
+    {id: 4, name: 'Doris Jackson', description: 'Surgery receptionist'}
+  ];
+
+  selection: any = this.tableData[2];
+
+  submitted = false;
 
   constructor(private modal: NgbModal,
               private log: LoggerService,
@@ -45,4 +57,12 @@ export class PropertyServiceComponent implements OnInit {
     //     },
     //   );
   }
+
+  onSubmit() {
+      this.submitted = true;
+      console.log("Matching address")
+      console.log(this.address)
+      console.log(this.address.line1)
+      console.log(this.address.line2)
+    }
 }

@@ -1,9 +1,9 @@
 export class Address {
-  datasetId: number;
-
-
-  constructor() {
-    this.datasetId = 0;
-
-  }
+    constructor(
+        public line1: string,
+        public line2: string,
+        public line3: string,
+        public line4?: string,
+        public line5?: string
+    ) {}
 }
