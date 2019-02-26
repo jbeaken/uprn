@@ -1,17 +1,11 @@
 package org.endeavour.uprn.match.chain;
 
-import org.endeavour.uprn.bean.Address;
-import org.endeavour.uprn.bean.MatcherResult;
 import org.endeavour.uprn.bean.Phase;
-import org.endeavour.uprn.bean.Result;
+import org.endeavour.uprn.chain.AbstractChain;
 
-public interface MatchChain {
+public abstract class MatchChain extends AbstractChain {
 	
-	void setNextChain(MatchChain nextChain);
-	
-	void match(Address address, Result result);
-	
-	default Phase getPhase() {
+	public Phase getPhase() {
 		return Phase.MATCHING;
 	}
 }

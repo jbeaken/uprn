@@ -22,7 +22,7 @@ public class UPRNPreprocessor implements AddressPreprocessor {
 	public Result process(Address address) {
 		Result result = new Result();
 		
-		c1.process(address, result);
+		c1.proceed(address, result);
 		
 		return result;
 	}

@@ -4,6 +4,9 @@
 .project
 .settings/
 
+FrontEnd/node_modules/
+FrontEnd/src/main/frontend/node/
+
 
 bin/
 

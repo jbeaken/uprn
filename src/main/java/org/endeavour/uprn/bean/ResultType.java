@@ -1,7 +1,7 @@
 package org.endeavour.uprn.bean;
 
 public enum ResultType {
-	POSTCODE("Postcode");
+	POSTCODE("Postcode"), CITY("City");
 	
 	
 	String displayName;

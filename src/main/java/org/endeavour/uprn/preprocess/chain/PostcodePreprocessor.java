@@ -11,15 +11,13 @@ import org.endeavour.uprn.match.chain.MatchChain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PostcodePreprocessor implements PreprocessChain {
+public class PostcodePreprocessor extends PreprocessChain {
 
 	Logger logger = LoggerFactory.getLogger(PostcodePreprocessor.class);
 	
-	private PreprocessChain nextChain;
-
 	final Pattern postcodePattern;
 	
-	final ResultType propertyMatcherResultType = ResultType.POSTCODE;
+	final ResultType resultType = ResultType.POSTCODE;
 
 	public PostcodePreprocessor() {
 		super();
@@ -31,11 +29,7 @@ public class PostcodePreprocessor implements PreprocessChain {
 	}
 
 
-	public void setNextChain(PreprocessChain nextChain) {
-		this.nextChain = nextChain;
-	}
-
-	public void process(Address address, Result result) {
+	public void proceed(Address address, Result result) {
 
 		String postcode = address.getPostcode();
 
@@ -43,7 +37,7 @@ public class PostcodePreprocessor implements PreprocessChain {
 
 		if (address.getPostcode() == null) {
 
-			result.setFailure("Postcode is null", propertyMatcherResultType, getPhase());
+			result.setFailure("Postcode is null", resultType, getPhase());
 
 			return;
 		}
@@ -52,15 +46,13 @@ public class PostcodePreprocessor implements PreprocessChain {
 		boolean matches = matcher.matches();
 
 		if (!matches) {
-			result.setFailure("Postcode doesn't match regex", propertyMatcherResultType, getPhase());
+			result.setFailure("Postcode doesn't match regex", resultType, getPhase());
 			return;
 		}
 
 		logger.debug("Postcode is valid. Continuing chain");
 		
-		if(nextChain != null) {
-			nextChain.process(address, result);
-		}
+		next(address, result);
 
 	}
 

@@ -1,16 +1,11 @@
 package org.endeavour.uprn.preprocess.chain;
 
-import org.endeavour.uprn.bean.Address;
 import org.endeavour.uprn.bean.Phase;
-import org.endeavour.uprn.bean.Result;
+import org.endeavour.uprn.chain.AbstractChain;
 
-public interface PreprocessChain {
+public abstract class PreprocessChain extends AbstractChain {
 	
-	void setNextChain(PreprocessChain nextChain);
-	
-	void process(Address address, Result preprocessorResult);
-	
-	default Phase getPhase() {
+	public Phase getPhase() {
 		return Phase.PREPROCESSING;
 	}
 }

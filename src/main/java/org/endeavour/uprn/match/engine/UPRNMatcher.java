@@ -28,7 +28,7 @@ public class UPRNMatcher implements AddressMatcher {
 		
 		Result result = new Result();
 		
-		c1.match(address, result);
+		c1.proceed(address, result);
 		
 		return result;
 	}
