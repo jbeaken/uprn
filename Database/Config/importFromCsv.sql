@@ -39,10 +39,6 @@ ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS;
 
-select count(*) from uprn.abp_blpu
-# '4861145' Rows
-select * from uprn.abp_blpu;
- 
 # ID32_Classification_Records
 # Primary Key is CLASS_KEY
 drop table if exists uprn.abp_class;
@@ -68,11 +64,6 @@ FIELDS TERMINATED BY ','
 ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS;
-
-select count(*) from uprn.abp_class
-# '5381317' Rows
-
-select * from uprn.abp_class;
 
 
 # ID23_XREF_Records
@@ -150,10 +141,6 @@ ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS;
 
-select count(*) from uprn.abp_dpa
-# '3512745' Rows
-
-select * from uprn.abp_dpa;
 
  
 # ID24_LPI_Records
@@ -196,10 +183,6 @@ ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS;
 
-select count(*) from uprn.abp_lpi
-# '1048575' Rows
-
-select * from uprn.abp_lpi;
 
 
 # ID31_Organisation_Records
@@ -227,10 +210,7 @@ ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS;
 
-select count(*) from uprn.abp_org
-# '107788' Rows
 
-select * from uprn.abp_org;
 
  
 # ID11_Street_Records
@@ -271,10 +251,7 @@ ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS;
 
-select count(*) from uprn.abp_street
-# '68763' Rows
 
-select * from uprn.abp_street;
 
 # ID15_StreetDescriptor_Records
 # No Primary Key only USRN is Foreign Key
@@ -303,10 +280,7 @@ ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS;
 
-select count(*) from uprn.abp_streetdesc
-# '68763' Rows
 
-select * from uprn.abp_streetdesc;
 
 
 # ID30_Successor_Records
@@ -333,10 +307,7 @@ ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS;
 
-select count(*) from uprn.abp_successor
-# '0' Rows
 
-select * from uprn.abp_successor;
 
 
 # ID10_Header_Records
@@ -362,10 +333,6 @@ ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS;
 
-select count(*) from uprn.abp_header
-# '42' Rows
-
-select * from uprn.abp_header;
 
  
 # ID99_Trailer_Records
@@ -387,13 +354,38 @@ ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS;
 
+
+-- check
+
 select count(*) from uprn.abp_trailer
 # '42' Rows
 
-select * from uprn.abp_trailer;
+select count(*) from uprn.abp_header
+# '42' Rows
 
+select count(*) from uprn.abp_successor
+# '0' Rows
 
+select count(*) from uprn.abp_streetdesc
+# '68763' Rows
 
+select count(*) from uprn.abp_street
+# '68763' Rows
+
+select count(*) from uprn.abp_org
+# '107788' Rows
+
+select count(*) from uprn.abp_blpu
+# '4861145' Rows
+
+select count(*) from uprn.abp_class
+# '5381317' Rows
+
+select count(*) from uprn.abp_dpa
+# '3512745' Rows
+
+select count(*) from uprn.abp_lpi
+# '1048575' Rows
 
 
 

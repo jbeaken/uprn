@@ -52,5 +52,12 @@ export class PropertyMatcherComponent implements OnInit {
       console.log(this.address)
       console.log(this.address.line1)
       console.log(this.address.line2)
-    }
+    this.service.getList()
+      .subscribe(
+        result => {
+            console.log( result )
+        },
+      );
+  }
+
 }

@@ -4,6 +4,17 @@
 .project
 .settings/
 
+.idea/
+.mvn/.mvn.iml
+API/API.iml
+API/src/main/main1.iml
+API/src/test/test1.iml
+FrontEnd/FrontEnd.iml
+Library/MatcherLibrary.iml
+Library/src/main/main.iml
+Library/src/test/test.iml
+PropertyMatcher.iml
+
 FrontEnd/node_modules/
 FrontEnd/src/main/frontend/node/
 
