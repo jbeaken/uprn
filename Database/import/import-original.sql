@@ -357,35 +357,35 @@ IGNORE 1 ROWS;
 
 -- check
 
-select count(*) from uprn.abp_trailer
+select count(*) from uprn.abp_trailer;
 # '42' Rows
 
-select count(*) from uprn.abp_header
+select count(*) from uprn.abp_header;
 # '42' Rows
 
-select count(*) from uprn.abp_successor
+select count(*) from uprn.abp_successor;
 # '0' Rows
 
-select count(*) from uprn.abp_streetdesc
+select count(*) from uprn.abp_streetdesc;
 # '68763' Rows
 
-select count(*) from uprn.abp_street
+select count(*) from uprn.abp_street;
 # '68763' Rows
 
-select count(*) from uprn.abp_org
+select count(*) from uprn.abp_org;
 # '107788' Rows
 
-select count(*) from uprn.abp_blpu
+select count(*) from uprn.abp_blpu;
 # '4861145' Rows
 
-select count(*) from uprn.abp_class
+select count(*) from uprn.abp_class;
 # '5381317' Rows
 
-select count(*) from uprn.abp_dpa
+select count(*) from uprn.abp_dpa;
 # '3512745' Rows
 
-select count(*) from uprn.abp_lpi
-# '1048575' Rows
+select count(*) from uprn.abp_lpi;
+# '1048575' Rows (why 5155971??)
 
 
 
