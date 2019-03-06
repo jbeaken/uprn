@@ -10,8 +10,8 @@ export class PropertyMatcherService {
 
   constructor(private http: Http) { }
 
-  getList(): Observable<any> {
-    return this.http.get('/api/matcher/address?line1=l1&line2=l2&line3=l3')
+  match(address : Address): Observable<any> {
+    return this.http.get('/api/matcher/match?line1=' + address.line1 + '&line2=l2&line3=l3')
       .map((response) => response.json());
   }
 
@@ -26,7 +26,7 @@ export class PropertyMatcherService {
   deleteAddress(id: any): Observable<any> {
     const params = new URLSearchParams();
     params.set('id', id);
-    return this.http.delete('api/PropertyService', { search : params })
+    return this.http.delete('/api/matcher', { search : params })
       .map((response) => response.text());
   }
 
@@ -34,7 +34,7 @@ export class PropertyMatcherService {
     this.setSelectedAddress(Address);
     let params = new URLSearchParams();
     params.set('editMode', editMode ? '1' : '0');
-    return this.http.post('api/PropertyService/Address/save', Address, {search: params})
+    return this.http.post('/api/matcher/Address/save', Address, {search: params})
       .map((response) => response.json());
   }
 

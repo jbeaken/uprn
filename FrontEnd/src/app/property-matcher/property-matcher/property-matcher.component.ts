@@ -6,7 +6,7 @@ import {ToastsManager} from 'ng2-toastr';
 import {ModuleStateService} from 'eds-angular4/dist/common';
 import {Router} from '@angular/router';
 import {Address} from "./models/Address";
-import {FormsModule} from '@angular/forms';
+
 
 @Component({
   selector: 'app-property-matcher',
@@ -16,6 +16,10 @@ import {FormsModule} from '@angular/forms';
 export class PropertyMatcherComponent implements OnInit {
 
   address: Address  = new Address("", "", "", "", "");
+
+  response: any;
+
+  addresses: any[]
 
   tableData: any[] = [
     {id: 1, name: 'John Smith', description: 'Senior consultant'},
@@ -38,24 +42,19 @@ export class PropertyMatcherComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.service.getList()
-      .subscribe(
-        result => {
-            console.log( result )
-        },
-      );
+
   }
 
   onSubmit() {
       this.submitted = true;
       console.log("Matching address")
-      console.log(this.address)
       console.log(this.address.line1)
-      console.log(this.address.line2)
-    this.service.getList()
+    this.service.match( this.address )
       .subscribe(
         result => {
             console.log( result )
+            this.response = result
+            this.addresses = result.response.addresses
         },
       );
   }
