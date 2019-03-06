@@ -44,8 +44,7 @@ public class PropertyMatcherEndpoint {
                 .postCode("E2 6HL")
                 .build();
 
-        logger.info("Have received api request for address {}", address.getAddressLine1());
-        logger.info("SecurityContext {}", securityContext);
+        logger.info("Have received api request for q {}", address.getAddressLine1());
 
         String q = URLEncoder.encode(address.getAddressLine1(), "UTF-8");
 
@@ -61,9 +60,7 @@ public class PropertyMatcherEndpoint {
 //
         Result result = factory.match( address );
 
-        logger.info("Testing testing");
         logger.info("Result from address {} , {}", result, address);
-        logger.info("Testing redeploy");
 
         return Response
               .ok(object )
