@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.ws.rs.*;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -26,6 +27,7 @@ import java.net.URLEncoder;
 import java.util.List;
 
 @Path("/matcher")
+@Singleton
 @Api(description = "Api for all calls to property matching service")
 public class PropertyMatcherEndpoint {
 
