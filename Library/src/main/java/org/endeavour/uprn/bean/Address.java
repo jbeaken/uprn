@@ -4,7 +4,7 @@ import lombok.*;
 
 
 @Builder
-@Getter
+@Data
 @ToString
 public class Address {
 

@@ -22,6 +22,10 @@
                 org.endeavourhealth.skeleton.api.framework.exceptions.BaseExceptionMapper
             </param-value>
         </init-param>
+        <init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>org.endeavourhealth.propertymanager.jersey.config.ApplicationConfig</param-value>
+        </init-param>
 
         <!-- enable directory listings -->
         <init-param>

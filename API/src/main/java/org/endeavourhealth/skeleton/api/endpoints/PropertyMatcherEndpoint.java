@@ -8,9 +8,12 @@ import io.swagger.annotations.ApiOperation;
 
 import org.endeavour.uprn.bean.Result;
 import org.endeavour.uprn.factory.MatcherFactory;
+import org.endeavourhealth.propertymanager.model.DiscoveryAddress;
+import org.endeavourhealth.skeleton.api.dal.TemplateDAL_Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -20,12 +23,16 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.List;
 
 @Path("/matcher")
 @Api(description = "Api for all calls to property matching service")
 public class PropertyMatcherEndpoint {
 
-    private static final Logger logger = LoggerFactory.getLogger(PropertyMatcherEndpoint.class);
+    @Inject
+    public TemplateDAL_Hibernate hibernateService;
+
+    private final Logger logger = LoggerFactory.getLogger(PropertyMatcherEndpoint.class);
 
     private Client client = ClientBuilder.newClient();
 
@@ -44,6 +51,7 @@ public class PropertyMatcherEndpoint {
                 .postCode("E2 6HL")
                 .build();
 
+        logger.info("Using {}", hibernateService);
         logger.info("Have received api request for q {}", address.getAddressLine1());
 
         String q = URLEncoder.encode(address.getAddressLine1(), "UTF-8");
@@ -63,7 +71,25 @@ public class PropertyMatcherEndpoint {
         logger.info("Result from address {} , {}", result, address);
 
         return Response
-              .ok(object )
+              .ok( object )
               .build();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Timed(absolute = true, name="Template.TemplateEndpoint.Message.Get")
+    @Path("/getAddresses")
+    @ApiOperation(value = "Matches an address to a property")
+    public Response getAddresses(@Context SecurityContext securityContext, @QueryParam("line1") String line1, @QueryParam("line2") String line2, @QueryParam("line3") String line3) throws UnsupportedEncodingException {
+
+
+        List<DiscoveryAddress> addresses = hibernateService.getAddresses();
+
+        logger.info("Retrieved {} addresses", ((List) addresses).size());
+
+        return Response
+                .ok( addresses )
+                .build();
     }
 }

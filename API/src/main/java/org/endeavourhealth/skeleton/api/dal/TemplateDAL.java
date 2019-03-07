@@ -1,5 +1,11 @@
 package org.endeavourhealth.skeleton.api.dal;
 
+
+import org.endeavourhealth.propertymanager.model.DiscoveryAddress;
+
+import java.util.List;
+
 public interface TemplateDAL {
-    String getGreeting();
+
+    List<DiscoveryAddress> getAddresses();
 }
