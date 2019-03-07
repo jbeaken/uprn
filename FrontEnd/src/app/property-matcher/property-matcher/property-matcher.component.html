@@ -8,110 +8,178 @@
     <!-- split into md-5 and md-7 cards -->
     <div class="module-body">
 
-      <div class="row">
 
-        <div class="col-md-5">
-          <div class="card">
 
-            <div class="card-header">
-              Address to match
-            </div>
 
-            <div class="card-body">
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">UPRN Search</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Addresses</a>
+        </li>
+      </ul>
 
-              <div class="row">
-                <div class="col-md-12">
+      <div class="tab-content" id="myTabContent">
 
-                    <form (ngSubmit)="onSubmit()" #addressForm="ngForm">
-                      <!-- Form group -->
-                      <div class="form-group">
-                        <label class="form-control-label required-field">Line 1</label>   <!-- Required field -->
-                        <input type="text" class="form-control" placeholder="E.g. 45 Redford Street London E3 5TT" [(ngModel)]="address.line1" name="line1">
-                      </div>
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+          <div class="row">
 
-                      <div class="pull-right">
-                        <button type="submit" [disabled]="!addressForm.form.valid" class="btn btn-danger">Match</button>
-                      </div>
-                  </form>
+            <div class="col-md-5">
+              <div class="card">
 
-                </div><!-- /col-md-12 -->
+                <div class="card-header">
+                  Address to match
+                </div>
 
-              </div>
-            </div>
-          </div><!-- /card -->
+                <div class="card-body">
 
-          <div class="card" [hidden]="!submitted">
+                  <div class="row">
+                    <div class="col-md-12">
 
-            <div class="card-header">
-              Raw Json
-            </div>
+                      <form (ngSubmit)="onSubmit()" #addressForm="ngForm">
+                        <!-- Form group -->
+                        <div class="form-group">
+                          <label class="form-control-label required-field">Line 1</label>   <!-- Required field -->
+                          <input type="text" class="form-control" placeholder="E.g. 45 Redford Street London E3 5TT" [(ngModel)]="address.line1" name="line1">
+                        </div>
 
-            <div class="card-body">
+                        <div class="pull-right">
+                          <button type="submit" [disabled]="!addressForm.form.valid" class="btn btn-danger">Match</button>
+                        </div>
+                      </form>
 
-              <div class="row">
-                <div class="col-md-12">
-                    {{response | json}}
-                </div><!-- /col-md-12 -->
-
-              </div>
-            </div>
-          </div><!-- /card -->
-
-        </div>
-
-        <div class="col-md-7">
-          <div class="card">
-            <div class="card-header">
-              Address Matching Results
-
-              <!-- "Pulled" button group -->
-              <div class="pull-right">
-                <button type="button" class="btn btn-success" (click)="print(selection)">Print</button>
-                <button type="button" class="btn btn-danger" (click)="delete(selection)">Delete</button>
-              </div>
-
-            </div>
-
-            <div class="card-body">
-              <div class="row">
-
-                <div class="col-md-12">
-                  <div class="scroll-box-450" [hidden]="!addresses">
-                    <!-- Table -->
-                    <table class="table table-striped table-sm table-hover">
-                      <thead>
-                        <tr class="d-flex">
-                          <th class="col-2">UPRN</th>
-                          <th class="col-8">Address</th>
-                          <th class="col-1">Score</th>
-                          <th class="col-1"></th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr class="d-flex show-child-on-hover" *ngFor="let item of addresses" (click)="selection = item" [class.selection]="selection == item">
-                          <td class="col-2">{{item.uprn}}</td>
-                          <td class="col-8">{{item.formattedAddress}}</td>
-                          <td class="col-1"  [ngClass]="{
-                                'top': item.confidenceScore > 0.8,
-                                'is-inactive': item.confidenceScore <= 0.8
-                              }">{{item.confidenceScore}}
-                          </td>
-                          <td class="col-1">
-                            <div class="pull-right child-to-show">
-                              <button type="button" class="btn btn-xs btn-success"><em class="fa fa-pencil"></em></button>
-                              <button type="button" class="btn btn-xs btn-danger"><em class="fa fa-trash"></em></button>
-                            </div>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+                    </div><!-- /col-md-12 -->
 
                   </div>
-                </div><!-- /col-md-12 -->
+                </div>
+              </div><!-- /card -->
+
+              <div class="card" [hidden]="!submitted">
+
+                <div class="card-header">
+                  Raw Json
+                </div>
+
+                <div class="card-body">
+
+                  <div class="row">
+                    <div class="col-md-12">
+                      {{response | json}}
+                    </div><!-- /col-md-12 -->
+
+                  </div>
+                </div>
+              </div><!-- /card -->
+
+            </div>
+
+            <div class="col-md-7">
+              <div class="card">
+                <div class="card-header">
+                  Address Matching Results
+
+                  <!-- "Pulled" button group -->
+                  <div class="pull-right">
+                    <button type="button" class="btn btn-success" (click)="print(selection)">Print</button>
+                    <button type="button" class="btn btn-danger" (click)="delete(selection)">Delete</button>
+                  </div>
+
+                </div>
+
+                <div class="card-body">
+                  <div class="row">
+
+                    <div class="col-md-12">
+                      <div class="scroll-box-450" [hidden]="!addresses">
+                        <!-- Table -->
+                        <table class="table table-striped table-sm table-hover">
+                          <thead>
+                          <tr class="d-flex">
+                            <th class="col-2">UPRN</th>
+                            <th class="col-8">Address</th>
+                            <th class="col-1">Score</th>
+                            <th class="col-1"></th>
+                          </tr>
+                          </thead>
+                          <tbody>
+                          <tr class="d-flex show-child-on-hover" *ngFor="let item of addresses" (click)="selection = item" [class.selection]="selection == item">
+                            <td class="col-2">{{item.uprn}}</td>
+                            <td class="col-8">{{item.formattedAddress}}</td>
+                            <td class="col-1"  [ngClass]="{
+                           'top': item.confidenceScore > 0.8,
+                           'is-inactive': item.confidenceScore <= 0.8
+                         }">{{item.confidenceScore}}
+                            </td>
+                            <td class="col-1">
+                              <div class="pull-right child-to-show">
+                                <button type="button" class="btn btn-xs btn-success"><em class="fa fa-pencil"></em></button>
+                                <button type="button" class="btn btn-xs btn-danger"><em class="fa fa-trash"></em></button>
+                              </div>
+                            </td>
+                          </tr>
+                          </tbody>
+                        </table>
+
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
               </div>
-            </div><!-- /card-body -->
+
+            </div>
           </div>
-        </div>
+        </div><!-- /Search UPRN -->
+
+        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+          <div class="row">
+
+            <div class="col-md-12">
+              <div class="card">
+
+                <div class="card-header">
+                  Discovery Addresses
+                </div>
+
+                <div class="card-body">
+
+                  <table class="table table-striped table-sm table-hover">
+
+                    <thead>
+                    <tr class="d-flex">
+                      <th class="col-2">Line 1</th>
+                      <th class="col-2">Line 2</th>
+                      <th class="col-2">Line 3</th>
+                      <th class="col-2">Postcode</th>
+                      <th class="col-1"></th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr class="d-flex show-child-on-hover" *ngFor="let ad of discoveryAddresses" >
+                      <td class="col-2">{{ad.line1}}</td>
+                      <td class="col-2">{{ad.line2}}</td>
+                      <td class="col-2">{{ad.line3}}</td>
+                      <td class="col-2">{{ad.postcode}}</td>
+                      <td class="col-1">
+                        <div class="pull-right child-to-show">
+                          <button type="button" class="btn btn-xs btn-success"><em class="fa fa-pencil"></em></button>
+                          <button type="button" class="btn btn-xs btn-danger"><em class="fa fa-trash"></em></button>
+                        </div>
+                      </td>
+                    </tr>
+                    </tbody>
+
+                  </table>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div><!-- dnd -->
+
       </div>
     </div>
   </div>

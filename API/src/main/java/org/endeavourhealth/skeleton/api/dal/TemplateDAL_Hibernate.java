@@ -48,7 +48,7 @@ public class TemplateDAL_Hibernate implements TemplateDAL {
 
         session.beginTransaction();
 
-        Query query = session.createQuery("select * from DiscoveryAddress");
+        Query query = session.createQuery("select da from DiscoveryAddress da");
 
         query.setFirstResult(0);
         query.setMaxResults(10);

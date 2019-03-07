@@ -21,7 +21,7 @@ public class DiscoveryAddress {
     private String line4;
 
     private String county;
-    private String postCode;
+    private String postcode;
 
     private String onsAddress;
     private Integer score;

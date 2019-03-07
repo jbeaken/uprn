@@ -11,7 +11,7 @@ export class PropertyMatcherService {
   constructor(private http: Http) { }
 
   match(address : Address): Observable<any> {
-    return this.http.get('/api/matcher/match?line1=' + address.line1 + '&line2=l2&line3=l3')
+    return this.http.get('/api/matcher/match?line1=' + address.line1 )
       .map((response) => response.json());
   }
 
@@ -38,4 +38,8 @@ export class PropertyMatcherService {
       .map((response) => response.json());
   }
 
+  getDiscoveryAddresses() {
+    return this.http.get('/api/matcher/getDiscoveryAddresses')
+      .map((response) => response.json());
+  }
 }

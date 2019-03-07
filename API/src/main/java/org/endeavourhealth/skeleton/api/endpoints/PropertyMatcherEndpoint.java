@@ -79,14 +79,19 @@ public class PropertyMatcherEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Timed(absolute = true, name="Template.TemplateEndpoint.Message.Get")
-    @Path("/getAddresses")
+    @Path("/getDiscoveryAddresses")
     @ApiOperation(value = "Matches an address to a property")
-    public Response getAddresses(@Context SecurityContext securityContext, @QueryParam("line1") String line1, @QueryParam("line2") String line2, @QueryParam("line3") String line3) throws UnsupportedEncodingException {
+    public Response getDiscoveryAddresses(@Context SecurityContext securityContext, @QueryParam("line1") String line1, @QueryParam("line2") String line2, @QueryParam("line3") String line3) throws UnsupportedEncodingException {
 
 
         List<DiscoveryAddress> addresses = hibernateService.getAddresses();
 
-        logger.info("Retrieved {} addresses", ((List) addresses).size());
+        logger.info("Retrieved {} addresses", addresses.size());
+
+        for(DiscoveryAddress da : addresses) {
+            logger.info(da.toString());
+            logger.info(da.getPostcode());
+        }
 
         return Response
                 .ok( addresses )

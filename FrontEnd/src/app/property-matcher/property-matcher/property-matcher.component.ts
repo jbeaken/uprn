@@ -17,6 +17,8 @@ export class PropertyMatcherComponent implements OnInit {
 
   address: Address  = new Address("", "", "", "", "");
 
+  discoveryAddresses : any[]
+
   response: any;
 
   addresses: any[]
@@ -42,6 +44,15 @@ export class PropertyMatcherComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.service.getDiscoveryAddresses( )
+      .subscribe(
+        result => {
+          console.log( result )
+          this.discoveryAddresses = result
+        },
+      );
+
 
   }
 
