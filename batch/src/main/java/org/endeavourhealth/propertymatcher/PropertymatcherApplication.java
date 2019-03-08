@@ -1,11 +1,6 @@
 package org.endeavourhealth.propertymatcher;
 
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
+import java.io.*;
 import java.util.Arrays;
 import java.util.Iterator;
 
@@ -16,7 +11,6 @@ import org.endeavourhealth.propertymatcher.bean.Address;
 import org.endeavourhealth.propertymatcher.bean.CSVAddress;
 import org.endeavourhealth.propertymatcher.bean.Nag;
 import org.endeavourhealth.propertymatcher.bean.Paf;
-import org.endeavourhealth.propertymatcher.bean.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -39,13 +33,19 @@ public class PropertymatcherApplication {
 }
 
 @Component
-class CommandLineAppStartupRunner implements CommandLineRunner {
+final class CommandLineAppStartupRunner implements CommandLineRunner {
 
 	private static final Logger logger = LoggerFactory.getLogger(CommandLineAppStartupRunner.class);
+
+	private final String outputCSVFilename = "/media/ext/LearningHealth/output.csv";
 
 	private final String url = "http://localhost:9001/addresses?verbose=true&matchthreshold=5&rangekm=&historical=true&offset=0&classificationfilter=&lon=-3.5091076&enddate=&limit=10&input=";
 
 	private final RestTemplate restTemplate = new RestTemplateBuilder().build();
+
+	private CSVPrinter csvPrinter;
+
+	private final ObjectMapper mapper = new ObjectMapper();
 
 	public void run(String... args) throws Exception {
 
@@ -54,78 +54,102 @@ class CommandLineAppStartupRunner implements CommandLineRunner {
 		long start = System.currentTimeMillis();
 		long count = 0;
 
-		Writer writer = new BufferedWriter(new FileWriter("/media/ext/LearningHealth/output.csv"));
+		initialiseCSVPrinter();
 
-		CSVPrinter csvPrinter = new CSVPrinter(writer,
-				CSVFormat.DEFAULT.withHeader("AddressLine1", "AddressLine2", "AddressLine3", "AddressLine4", "County",
-						"Postcode", "Score", "OnsAddress", "OnsPostcode", "OnsUprn", "Status"));
-
-		ObjectMapper mapper = new ObjectMapper();
-
-		Reader in = new FileReader("/media/ext/LearningHealth/address_extract.csv");
-		Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in);
-
-		for (CSVRecord record : records) {
+		for (CSVRecord record : readCSVRecords()) {
 
 			CSVAddress csvAddress = new CSVAddress(record);
 
-			String json = getResponseFromOns(csvAddress);
+			String json = getResponseFromOnsServer(csvAddress);
 
-			JsonNode root = mapper.readTree(json);
-			JsonNode jsonResponse = root.path("response");
-			JsonNode jsonAddresses = jsonResponse.get("addresses");
-			Iterator<JsonNode> addresses = jsonAddresses.iterator();
+			Address onsAddress = getOnsAddressFromJson( json );
 
-			String status = "MATCH";
-			double score = 1000;
-
-			Address onsAddress = null;
-			JsonNode address = null;
-
-			if (addresses.hasNext()) {
-				
-				try {
-
-				address = addresses.next();
-
-				if (onsAddress == null) {
-					// First address, use it as must have highest score (Exception thrown if not)
-					onsAddress = getOnsAddress(address);
-				}
-				
-				if (onsAddress.getConfidenceScore() > score)
-					throw new Exception("Confidence score for non-first index is higher than postion 0 score");
-				
-				score = onsAddress.getConfidenceScore();
-				
-				}catch(Exception e) {
-					logger.error("Cannot create address from " + address, e);
-				}
-				
-//                logger.info( "{}", address.toString());
-				
-			} else {
-				status = "NO_MATCH";
-				logger.error("No result for q " + csvAddress.getQ());
-				onsAddress = new Address();
-			}
-			
-			onsAddress.setStatus(status);
-
-			printToCsv(csvPrinter, csvAddress, onsAddress);
+			printToCsv(csvAddress, onsAddress);
 
 			count++;
 
-			long end = System.currentTimeMillis();
 			if (count % 100 == 0) {
+				long end = System.currentTimeMillis();
 				logger.info("Have processed {} records in {} milliseconds", count, (end - start));
 			}
 		}
 
 		long end = System.currentTimeMillis();
-		if (count % 100 == 0) {
-			logger.info("Finished!! Have processed {} records in {} milliseconds", count, (end - start));
+		logger.info("Finished!! Have processed {} records in {} milliseconds", count, (end - start));
+	}
+
+	private Iterable<CSVRecord> readCSVRecords() throws IOException {
+
+		Reader in = new FileReader("/media/ext/LearningHealth/address_extract.csv");
+
+		Iterable<CSVRecord> records = CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in);
+
+		return records;
+	}
+
+	private void initialiseCSVPrinter() throws IOException {
+
+
+		Writer writer = new BufferedWriter(new FileWriter( outputCSVFilename ));
+
+		csvPrinter = new CSVPrinter(writer,
+				CSVFormat.DEFAULT.withHeader("AddressLine1",
+						"AddressLine2",
+						"AddressLine3",
+						"AddressLine4",
+						"County",
+						"Postcode",
+						"Score",
+						"OnsAddress",
+						"OnsPostcode",
+						"OnsUprn",
+						"Status"));
+
+	}
+
+	private Address getOnsAddressFromJson(String json) throws IOException {
+
+		JsonNode root = mapper.readTree(json);
+		JsonNode jsonResponse = root.path("response");
+		JsonNode jsonAddresses = jsonResponse.get("addresses");
+		Iterator<JsonNode> addresses = jsonAddresses.iterator();
+
+		String status = "MATCH";
+		double score = 1000;
+
+		Address onsAddress = null;
+		JsonNode address = null;
+
+		if (addresses.hasNext()) {
+
+			try {
+
+				address = addresses.next();
+
+				if (onsAddress == null) {
+					// First address, use it will have highest confidence score (Exception thrown if not)
+					onsAddress = getOnsAddress(address);
+				}
+
+				if (onsAddress.getConfidenceScore() > score)
+					throw new Exception("Confidence score for non-first index is higher than postion 0 score");
+
+				score = onsAddress.getConfidenceScore();
+
+			}catch(Exception e) {
+				logger.error("Cannot create address from " + address, e);
+			}
+
+//                logger.info( "{}", address.toString());
+
+		} else {
+			status = "NO_MATCH";
+			onsAddress = new Address();
 		}
+
+		onsAddress.setStatus(status);
+
+		return onsAddress;
 	}
 
 	private Address getOnsAddress(JsonNode address) {
@@ -137,33 +161,42 @@ class CommandLineAppStartupRunner implements CommandLineRunner {
 		
 		onsAddress.setUprn( address.get("uprn").asText() );
 
-		JsonNode paf = address.get("paf");
-		
-		if(paf != null) {
-			Paf p = new Paf(paf.get("postcode").asText(), paf.get("postTown").asText() );
-			onsAddress.setPaf(p);
-		}
-		
-		JsonNode nag = address.get("nag");
-		
-		if(nag != null) {
-			JsonNode node = nag.get(0);
-			Nag n = new Nag(node.get("postcodeLocator").asText(), node.get("locality").asText() );
-			onsAddress.setNag(n);
-		}		
+//		JsonNode paf = address.get("paf");
+//
+//		if(paf != null) {
+//			Paf p = new Paf(paf.get("postcode").asText(), paf.get("postTown").asText() );
+//			onsAddress.setPaf(p);
+//		}
+//
+//		JsonNode nag = address.get("nag");
+//
+//		if(nag != null) {
+//			JsonNode node = nag.get(0);
+//			Nag n = new Nag(node.get("postcodeLocator").asText(), node.get("locality").asText() );
+//			onsAddress.setNag(n);
+//		}
 		
 		return onsAddress;
 	}
 
-	private void printToCsv(CSVPrinter csvPrinter, CSVAddress csvAddress, Address address) throws IOException {
+	private void printToCsv(CSVAddress csvAddress, Address address) throws IOException {
 
-		csvPrinter.printRecord(csvAddress.getLine1(), csvAddress.getLine2(), csvAddress.getLine3(),
-				csvAddress.getLine4(), csvAddress.getCounty(), csvAddress.getPostcode(), address.getConfidenceScore(),
-				address.getFormattedAddress(), address.getPostcode(), address.getUprn(), address.getStatus());
+		csvPrinter.printRecord(
+//				csvAddress.getLine1(),
+//				csvAddress.getLine2(),
+//				csvAddress.getLine3(),
+//				csvAddress.getLine4(),
+				csvAddress.getQ(),
+//				csvAddress.getPostcode(),
+				address.getConfidenceScore(),
+				address.getFormattedAddress(),
+//				address.getPostcode(),  //need nag and or paf, so beware
+				address.getUprn(),
+				address.getStatus());
 
 	}
 
-	private String getResponseFromOns(CSVAddress csvAddress) {
+	private String getResponseFromOnsServer(CSVAddress csvAddress) {
 
 		String q = csvAddress.getQ();
 
