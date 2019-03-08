@@ -17,7 +17,7 @@ public class Address {
 	}
 	
 	//From ons match
-	@JsonProperty private Float confidenceScore;
+	@JsonProperty private Double confidenceScore;
 	@JsonProperty private String formattedAddress;
 	@JsonProperty private String uprn;
 	
@@ -25,11 +25,12 @@ public class Address {
 	private String status;
 	
 	@JsonProperty private Paf paf;
-//	@JsonProperty private Nag nag;
+	@JsonProperty private Nag nag;
 
 	public Object getPostcode() {
-		if(paf == null) return null;
+		if(paf != null) return paf.getPostcode();
+		if(nag != null) return nag.getPostcode();
 		
-		return paf.getPostcode();
+		return null;
 	}
 }
