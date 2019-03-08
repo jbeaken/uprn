@@ -14,5 +14,5 @@ public class Response {
 	}
 
 	@JsonProperty
-	private List<Address> addresses;
+	private List<ONSAddress> addresses;
 }

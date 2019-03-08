@@ -5,14 +5,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
-public class Address {
+public class ONSAddress {
 	
 	
-	public Address() {
-		this.status = "MATCHED";
-	}
-	
-	public Address(boolean invalidStats) {
+	public ONSAddress() {
 		this.status = "NO_MATCH";
 	}
 	
