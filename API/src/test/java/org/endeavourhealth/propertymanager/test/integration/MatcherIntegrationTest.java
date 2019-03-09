@@ -9,6 +9,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.endeavour.uprn.factory.MatcherFactory;
 import org.endeavourhealth.skeleton.api.dal.TemplateDAL_Hibernate;
 import org.endeavourhealth.skeleton.api.endpoints.PropertyMatcherEndpoint;
 
@@ -20,9 +21,12 @@ import org.glassfish.jersey.test.TestProperties;
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MatcherIntegrationTest extends JerseyTest {
 
+    private final Logger logger = LoggerFactory.getLogger(MatcherIntegrationTest.class);
 
     @Override
     protected Application configure() {
@@ -55,6 +59,8 @@ public class MatcherIntegrationTest extends JerseyTest {
         assertThat( response.getHeaderString(HttpHeaders.CONTENT_TYPE) ).isEqualTo(  MediaType.APPLICATION_JSON );
 
         String content = response.readEntity(String.class);
+
+        logger.warn(content);
 
     }
 }
