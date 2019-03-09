@@ -29,7 +29,7 @@ public class TemplateDAL_Hibernate implements TemplateDAL {
 
     @PostConstruct
     public void init() {
-        logger.info("In Hiberate Repository, booting sessionFactory");
+        logger.info("In Hibernate Repository, booting sessionFactory");
 
         long start = System.currentTimeMillis();
 
@@ -76,7 +76,7 @@ public class TemplateDAL_Hibernate implements TemplateDAL {
         MetadataSources sources = new MetadataSources( standardRegistry );
 
 //		sources.addPackage( "org.jack.scratchpad.domain" );
-        sources.addAnnotatedClass( DiscoveryAddress.class );
+//        sources.addAnnotatedClass( DiscoveryAddress.class );
 
         Metadata metadata = sources.buildMetadata();
 

@@ -8,7 +8,7 @@
 		</encoder>
 	</appender>
 
-	<logger name="org.glassfish.jersey.test">
+	<logger name="org.glassfish">
 		<level value="TRACE" />
 	</logger>
 
