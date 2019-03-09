@@ -35,8 +35,6 @@ final class CommandLineAppStartupRunner implements CommandLineRunner {
 
 	private final Logger logger = LoggerFactory.getLogger(CommandLineAppStartupRunner.class);
 
-	private final String outputCSVFilename = "/media/ext/LearningHealth/output.csv";
-
 	private final String url = "http://localhost:9001/addresses?verbose=true&matchthreshold=5&rangekm=&historical=true&offset=0&classificationfilter=&lon=-3.5091076&enddate=&limit=10&input=";
 
 	private final RestTemplate restTemplate = new RestTemplateBuilder().build();
@@ -45,16 +43,26 @@ final class CommandLineAppStartupRunner implements CommandLineRunner {
 
 	private final ObjectMapper mapper = new ObjectMapper();
 
+	final int counterStart = 0;
+	final int counterEnd = 200_000;
+
+    private final String outputCSVFilename = "/media/ext/LearningHealth/output" + counterStart + ".csv";
+
+
 	public void run(String... args) throws Exception {
 
 		logger.info("Import of csv started with command-line arguments: {} .", Arrays.toString(args));
 
 		long start = System.currentTimeMillis();
-		long count = 0;
+		int counter = 0;
 
 		initialiseCSVPrinter();
 
 		for (CSVRecord record : readCSVRecords()) {
+
+            counter++;
+
+		    if(counter < counterStart) continue;
 
 			CSVAddress csvAddress = new CSVAddress(record);
 
@@ -64,17 +72,20 @@ final class CommandLineAppStartupRunner implements CommandLineRunner {
 
 			printToCsv(csvAddress, onsAddress);
 
-			count++;
-
-			if (count % 100 == 0) {
+			if (counter % 100 == 0) {
 				long end = System.currentTimeMillis();
-				logger.info("Have processed {} records in {} milliseconds", count, (end - start));
+				logger.info("Have processed {} records in {} milliseconds", counter, (end - start));
 			}
+
+			if(counter == counterEnd) break;
 		}
 
 		long end = System.currentTimeMillis();
 
-		logger.info("Finished!! Have processed {} records in {} milliseconds", count, (end - start));
+		logger.info("Finished!! Have processed {} records in {} milliseconds", counter, (end - start));
+
+		csvPrinter.flush();
+		csvPrinter.close();
 	}
 
 	private Iterable<CSVRecord> readCSVRecords() throws IOException {
@@ -94,7 +105,15 @@ final class CommandLineAppStartupRunner implements CommandLineRunner {
 						"Score",
 						"ONSAddress",
 						"UPRN",
-						"Status"));
+						"Status",
+                        //Import from discovery csv
+                        "Line1",
+                        "Line2",
+                        "Line3",
+                        "Line4",
+                        "County",
+                        "Postcode",
+                        "PsuedoPersonid"));
 	}
 
 	private ONSAddress getOnsAddressFromJson(String json) throws IOException {
@@ -130,6 +149,8 @@ final class CommandLineAppStartupRunner implements CommandLineRunner {
 		
 		onsAddress.setUprn( address.get("uprn").asText() );
 
+		onsAddress.setClassificationCode( address.get("classificationCode").asText() );
+
 //		JsonNode paf = address.get("paf");
 //
 //		if(paf != null) {
@@ -151,19 +172,23 @@ final class CommandLineAppStartupRunner implements CommandLineRunner {
 	private void printToCsv(CSVAddress csvAddress, ONSAddress address) throws IOException {
 
 		csvPrinter.printRecord(
-//				csvAddress.getLine1(),
-//				csvAddress.getLine2(),
-//				csvAddress.getLine3(),
-//				csvAddress.getLine4(),
 				csvAddress.getQ(),
-//				csvAddress.getPostcode(),
-				address.getConfidenceScore(),
-				address.getFormattedAddress(),
-//				address.getPostcode(),  //need nag and or paf, so beware
-				address.getUprn(),
-				address.getStatus());
 
-	}
+				address.getConfidenceScore(),
+                address.getFormattedAddress(),
+				address.getUprn(),
+				address.getStatus(),
+
+   				csvAddress.getLine1(),
+				csvAddress.getLine2(),
+				csvAddress.getLine3(),
+				csvAddress.getLine4(),
+                csvAddress.getPostcode(),
+                csvAddress.getPsuedoPersonId(),
+                csvAddress.getOrgPostcode());
+
+
+    }
 
 	private String getResponseFromOnsServer(CSVAddress csvAddress) {
 

@@ -14,6 +14,10 @@ public class CSVAddress {
 		this.line4 = record.get("AddressLine4");
 		this.county = record.get("County");
 		this.postcode = record.get("Postcode");
+		this.psuedoPersonId = record.get("PersonPseudoId");
+		this.orgPostcode = record.get("OrgPostcode");
+
+
 	}
 	
 	private  CSVAddress() {
@@ -26,7 +30,10 @@ public class CSVAddress {
 	private String line4;
 	private String county;
 	private String postcode;
-	
+
+	private String psuedoPersonId;
+	private String orgPostcode;
+
 	public String getQ() {
 		return line1 + " " + line2 + " " + line3 + " " + line4 + " " + county + " " + postcode;
 	}

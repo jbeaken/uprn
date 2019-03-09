@@ -16,6 +16,7 @@ public class ONSAddress {
 	@JsonProperty private Double confidenceScore;
 	@JsonProperty private String formattedAddress;
 	@JsonProperty private String uprn;
+	@JsonProperty private String classificationCode;
 	
 	//Local state
 	private String status;
