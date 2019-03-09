@@ -17,6 +17,8 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.glassfish.jersey.test.TestProperties;
 
+import static org.assertj.core.api.Assertions.*;
+
 import org.junit.Test;
 
 public class MatcherIntegrationTest extends JerseyTest {
@@ -42,20 +44,15 @@ public class MatcherIntegrationTest extends JerseyTest {
     @Test
     public void givenGetMatch_whenCorrectRequest_thenResponseIsOkAndContainsHi() {
 
-        WebTarget webTarget = target("/matcher/match");
+        Response response = target("/matcher/match")
+                .queryParam("line1", "asdf")
+                .queryParam("line2", "asdf")
+                .request()
+                .get();
 
-        webTarget = webTarget.queryParam("line1", "asdf");
-        webTarget = webTarget.queryParam("line2", "asdf");
+        assertThat( response.getStatus() ).isEqualTo(  Status.OK.getStatusCode() );
 
-        Response response = webTarget.request().get();
-
-        assertEquals("Http Response should be 200: ",
-                Status.OK.getStatusCode(),
-                response.getStatus());
-
-        assertEquals("Http Content-Type should be: ",
-                MediaType.APPLICATION_JSON,
-                response.getHeaderString(HttpHeaders.CONTENT_TYPE));
+        assertThat( response.getHeaderString(HttpHeaders.CONTENT_TYPE) ).isEqualTo(  MediaType.APPLICATION_JSON );
 
         String content = response.readEntity(String.class);
 
