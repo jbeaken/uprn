@@ -43,7 +43,7 @@ final class CommandLineAppStartupRunner implements CommandLineRunner {
 
 	private final ObjectMapper mapper = new ObjectMapper();
 
-	final int counterStart = 0;
+	final int counterStart = 174900;
 	final int counterEnd = 2_000_000;
 
     private final String outputCSVFilename = "/media/ext/LearningHealth/output" + counterStart + ".csv";

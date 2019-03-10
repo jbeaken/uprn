@@ -58,20 +58,28 @@ public class PropertyMatcherEndpoint {
 
         String q = URLEncoder.encode(address.getAddressLine1(), "UTF-8");
 
-        Object object = client
-                .target("http://localhost:9001/addresses?verbose=true&matchthreshold=5&rangekm=&historical=true&offset=0&classificationfilter=&lon=-3.5091076&enddate=&limit=10&input=" + q+ "&lat=50.705948&startdate=")
+        Object object = null;
+
+        try {
+
+            object = client
+                    .target("http://localhost:9001/addresses?verbose=true&matchthreshold=5&rangekm=&historical=true&offset=0&classificationfilter=&lon=-3.5091076&enddate=&limit=10&input=" + q + "&lat=50.705948&startdate=")
 //                .path(String.valueOf(id))
-                .request(MediaType.APPLICATION_JSON)
-                .get(Object.class);
+                    .request(MediaType.APPLICATION_JSON)
+                    .get(Object.class);
 
-        logger.info("Have response {}", object.toString());
+            logger.info("Have response {}", object.toString());
 
-        MatcherFactory factory = MatcherFactory.build();
+            MatcherFactory factory = MatcherFactory.build();
 //
-        Result result = factory.match( address );
+            Result result = factory.match(address);
 
-        logger.info("Result from address {} , {}", result, address);
+            logger.info("Result from address {} , {}", result, address);
 
+        } catch (Exception e) {
+            logger.error("Cannot talk to server", e);
+            logger.error("Cannot talk to server", e.getCause());
+        }
         return Response
               .ok( object )
               .build();
