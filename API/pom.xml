@@ -246,9 +246,13 @@
                                     <log>Elasticsearch server is ready to accept connections</log>
                                     <time>40000</time>
                                     <http>
-                                        <url>http://${docker.host.address}:9200</url>
-                                        <status>401</status>
+                                        <url>http://${docker.host.address}:9200/_cat/health</url>
+                                        <status>200</status>
+                                        <method>GET</method>
                                     </http>
+                                    <exec>
+                                        <postStart>sleep 10</postStart>
+                                    </exec>
                                 </wait>
                             </run>
                         </image>
