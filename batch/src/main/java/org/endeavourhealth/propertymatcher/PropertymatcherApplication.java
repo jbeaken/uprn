@@ -44,7 +44,7 @@ final class CommandLineAppStartupRunner implements CommandLineRunner {
 	private final ObjectMapper mapper = new ObjectMapper();
 
 	final int counterStart = 0;
-	final int counterEnd = 200_000;
+	final int counterEnd = 2_000_000;
 
     private final String outputCSVFilename = "/media/ext/LearningHealth/output" + counterStart + ".csv";
 
@@ -106,14 +106,18 @@ final class CommandLineAppStartupRunner implements CommandLineRunner {
 						"ONSAddress",
 						"UPRN",
 						"Status",
-                        //Import from discovery csv
-                        "Line1",
+                        "Classification",
+
+						//Import from discovery csv
+
+						"Line1",
                         "Line2",
                         "Line3",
                         "Line4",
                         "County",
                         "Postcode",
-                        "PsuedoPersonid"));
+                        "OrgPostcode",
+                        "PseudoPersonid"));
 	}
 
 	private ONSAddress getOnsAddressFromJson(String json) throws IOException {
@@ -178,14 +182,16 @@ final class CommandLineAppStartupRunner implements CommandLineRunner {
                 address.getFormattedAddress(),
 				address.getUprn(),
 				address.getStatus(),
+   				address.getClassificationCode(),
 
    				csvAddress.getLine1(),
 				csvAddress.getLine2(),
 				csvAddress.getLine3(),
 				csvAddress.getLine4(),
+                csvAddress.getCounty(),
                 csvAddress.getPostcode(),
-                csvAddress.getPsuedoPersonId(),
-                csvAddress.getOrgPostcode());
+                csvAddress.getOrgPostcode(),
+				csvAddress.getPsuedoPersonId());
 
 
     }
