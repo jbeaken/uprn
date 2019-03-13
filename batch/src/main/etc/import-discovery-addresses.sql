@@ -16,7 +16,7 @@ create table uprn.address (
 
 
 
-LOAD DATA LOCAL INFILE '/media/ext/LearningHealth/address_extract.csv'
+LOAD DATA LOCAL INFILE '/media/ext/LearningHealth/batch/input/discovery.csv'
   INTO TABLE uprn.address
   FIELDS TERMINATED BY ','
   ENCLOSED BY '"'
