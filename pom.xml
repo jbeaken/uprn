@@ -43,6 +43,7 @@
     <modules>
         <module>API</module>
         <module>Library</module>
+        <module>batch</module>
     </modules>
 
     <build>
