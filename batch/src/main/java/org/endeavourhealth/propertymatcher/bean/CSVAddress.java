@@ -33,6 +33,32 @@ public class CSVAddress {
 
 		return address;
 	}
+
+	public static CSVAddress getMumpsCSVAddress(CSVRecord record) {
+        CSVAddress address = new CSVAddress();
+
+        String discoveryAddress = record.get("Discovery address");
+
+		String[] discoveryAddressParts = discoveryAddress.split(",");
+
+        address.line1 = discoveryAddressParts[0];
+        address.line2 = discoveryAddressParts[1];
+        address.line3 = discoveryAddressParts[2];
+        address.line4 = discoveryAddressParts[3];
+        address.county = discoveryAddressParts[4];
+        address.postcode = discoveryAddressParts[5];
+
+		address.mumpsId = Long.valueOf( record.get("ID") );
+		address.mumpsAlgorithum = record.get("Algorithm");
+		address.mumpsQualifier = record.get("Qualifier");
+		address.mumpsTable = record.get("Table");
+		address.mumpsKey = record.get("Key");
+		address.mumpsUprn = record.get("Match");
+//		address.mumpsStatus = record.get("Status");
+		address.mumpsAbpAddress = record.get("APB address");
+
+        return address;
+	}
 	
 	private  CSVAddress() {
 		super();
@@ -48,6 +74,15 @@ public class CSVAddress {
 	private String psuedoPersonId;
 	private String orgPostcode;
 
+
+	private Long mumpsId;
+	private String mumpsAlgorithum;
+	private String mumpsQualifier;
+	private String mumpsTable;
+	private String mumpsKey;
+	private String mumpsUprn; //Match
+	private String mumpsStatus;
+	private String mumpsAbpAddress;
 
 
 	public String getQ() {

@@ -2,13 +2,13 @@
 
 create table uprn.mumps_match(
        ID bigint,
-       DicoveryAddress VARCHAR(500),
+       DiscoveryAddress VARCHAR(500),
        APBAddress varchar(500),
        Algorithm  varchar(50),
        Qualifier varchar(50),
        UPRN  varchar(50),
-       Tables varchar(50),
-       Keysd varchar(50),
+       Table_Col varchar(50),
+       Key_Col varchar(50),
        Status varchar(50)
 );
 

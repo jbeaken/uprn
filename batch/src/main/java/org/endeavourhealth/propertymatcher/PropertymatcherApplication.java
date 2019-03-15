@@ -46,21 +46,21 @@ final class CommandLineAppStartupRunner implements CommandLineRunner {
     private String csvInput;
     private String csvOutput;
 
+    String csvType;
+
     final int counterStart = 0;
-    final int counterEnd = 100_000_000;
+    final int counterEnd = 500_000_000;
     final long start = System.currentTimeMillis();
 
     public void run(String... args) throws Exception {
 
         logger.info("Import of csv started with command-line arguments: {} .", Arrays.toString(args));
 
-        String csvType = args[0];
+        csvType = args[0];
 
-        initialise(csvType);
+        initialise();
 
-        initialiseCSVPrinter();
-
-        processRecords(csvType);
+        processRecords();
 
         long end = System.currentTimeMillis();
 
@@ -73,17 +73,23 @@ final class CommandLineAppStartupRunner implements CommandLineRunner {
     }
 
 
-    private void initialise(String csvType) {
-        if(csvType.equals("unmatched")) {
+    private void initialise() throws IOException {
+
+        if (csvType.equals("unmatched")) {
             csvInput = "/media/ext/LearningHealth/batch/input/unmatched.csv";
             csvOutput = "/media/ext/LearningHealth/batch/output/unmatched.csv";
-        } else if(csvType.equals("unmatched")) {
+        } else if (csvType.equals("discovery")) {
             csvInput = "/media/ext/LearningHealth/batch/input/discovery.csv";
-            csvOutput = "/media/ext/LearningHealth/batch/output/discovery" + start + ".csv";
+            csvOutput = "/media/ext/LearningHealth/batch/output/discovery" + counterStart + ".csv";
+        } else if (csvType.equals("mumps")) {
+            csvInput = "/media/ext/LearningHealth/batch/input/mumps.csv";
+            csvOutput = "/media/ext/LearningHealth/batch/output/mumps" + counterStart + ".csv";
         } else throw new RuntimeException(csvType + " csvType not supported!");
+
+        initialiseCSVPrinter();
     }
 
-    private void processRecords(String csvType) throws IOException {
+    private void processRecords() throws IOException {
 
         logger.info("Processing records for type {}", csvType);
 
@@ -101,6 +107,8 @@ final class CommandLineAppStartupRunner implements CommandLineRunner {
 
             if (csvType.equals("unmatched")) {
                 csvAddress = CSVAddress.getUnmatchedCSVAddress(record);
+            }  if (csvType.equals("mumps")) {
+                csvAddress = CSVAddress.getMumpsCSVAddress(record);
             } else {
                 csvAddress = CSVAddress.getDiscoveryCSVAddress(record);
             }
@@ -122,15 +130,44 @@ final class CommandLineAppStartupRunner implements CommandLineRunner {
 
     private Iterable<CSVRecord> readCSVRecords() throws IOException {
 
-        Reader in = new FileReader( csvInput );
+        Reader in = new FileReader(csvInput);
+
+        if(isMumpsCsv()) return CSVFormat.DEFAULT.withDelimiter('\t').withFirstRecordAsHeader().parse(in);
 
         return CSVFormat.DEFAULT.withFirstRecordAsHeader().parse(in);
     }
 
     private void initialiseCSVPrinter() throws IOException {
 
-        Writer writer = new BufferedWriter(new FileWriter( csvOutput ));
+        Writer writer = new BufferedWriter(new FileWriter(csvOutput));
 
+        if (csvType.equals("mumps")) {
+            csvPrinter = new CSVPrinter(writer,
+                    CSVFormat.DEFAULT.withHeader(
+                            "Discovery Address",
+                            "ONS Score",
+                            "ONS ABP Address",
+                            "ONS UPRN",
+                            "ONS Classification",
+
+                            //Mumps related
+                            "Mumps_UPRN",
+                            "Mumps ABP Address",
+                            "Mumps_ID",
+                            "Mumps Algorithm",
+                            "Mumps Qualifier",
+                            "Mumps Table",
+                            "Mumps Key",
+
+                            //Import from discovery csv
+
+                            "DiscoveryLine1",
+                            "DiscoveryLine2",
+                            "DiscoveryLine3",
+                            "DiscoveryLine4",
+                            "DiscoveryCounty",
+                            "DiscoveryPostcode"));
+    } else {
         csvPrinter = new CSVPrinter(writer,
                 CSVFormat.DEFAULT.withHeader(
                         "DiscoveryAddress",
@@ -151,6 +188,8 @@ final class CommandLineAppStartupRunner implements CommandLineRunner {
                         "OrgPostcode",
                         "PseudoPersonid"));
     }
+
+}
 
     private ONSAddress getOnsAddressFromJson(String json) throws IOException {
 
@@ -207,25 +246,57 @@ final class CommandLineAppStartupRunner implements CommandLineRunner {
 
     private void printToCsv(CSVAddress csvAddress, ONSAddress address) throws IOException {
 
-        csvPrinter.printRecord(
-                csvAddress.getQ(),
-
-                address.getConfidenceScore(),
-                address.getFormattedAddress(),
-                address.getUprn(),
-                address.getStatus(),
-                address.getClassificationCode(),
-
-                csvAddress.getLine1(),
-                csvAddress.getLine2(),
-                csvAddress.getLine3(),
-                csvAddress.getLine4(),
-                csvAddress.getCounty(),
-                csvAddress.getPostcode(),
-                csvAddress.getOrgPostcode(),
-                csvAddress.getPsuedoPersonId());
+        if(isMumpsCsv()) {
+            csvPrinter.printRecord(
+                    csvAddress.getQ(),
+                    address.getConfidenceScore(),
+                    address.getFormattedAddress(),
+                    address.getUprn(),
+                    address.getClassificationCode(),
 
 
+
+                    //Mumps
+                    csvAddress.getMumpsUprn(),
+                    csvAddress.getMumpsAbpAddress(),
+                    csvAddress.getMumpsId(),
+                    csvAddress.getMumpsAlgorithum(),
+                    csvAddress.getMumpsQualifier(),
+                    csvAddress.getMumpsTable(),
+                    csvAddress.getMumpsKey(),
+
+                    csvAddress.getLine1(),
+                    csvAddress.getLine2(),
+                    csvAddress.getLine3(),
+                    csvAddress.getLine4(),
+                    csvAddress.getCounty(),
+                    csvAddress.getPostcode());
+
+        } else {
+            csvPrinter.printRecord(
+                    csvAddress.getQ(),
+
+                    address.getConfidenceScore(),
+                    address.getFormattedAddress(),
+                    address.getUprn(),
+                    address.getStatus(),
+                    address.getClassificationCode(),
+
+                    csvAddress.getLine1(),
+                    csvAddress.getLine2(),
+                    csvAddress.getLine3(),
+                    csvAddress.getLine4(),
+                    csvAddress.getCounty(),
+                    csvAddress.getPostcode(),
+                    csvAddress.getOrgPostcode(),
+                    csvAddress.getPsuedoPersonId());
+        }
+
+    }
+
+    private boolean isMumpsCsv() {
+        if(csvType.equals("mumps")) return true;
+        return false;
     }
 
     private String getResponseFromOnsServer(CSVAddress csvAddress) {
