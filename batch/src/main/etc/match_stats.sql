@@ -1,3 +1,5 @@
+# ONS_MATCH
+
 # Average score of all results
 select avg(score) from ons_match;
 
@@ -32,4 +34,96 @@ select
   sum(case when score <= 0.3 then 1 else 0 end) / @total * 100 as "30- as %"
 from
   ons_match;
+
+
+# MUMPS_MATCH
+
+select count(*) from mumps_match;
++----------+
+| count(*) |
++----------+
+|  1514278 |
++----------+
+
+select count(*) from mumps_match where ONS_UPRN != Mumps_UPRN;
++----------+
+| count(*) |
++----------+
+|    76477 |
++----------+
+
+select count(*) from mumps_match where ONS_UPRN = Mumps_UPRN;
++----------+
+| count(*) |
++----------+
+|  1437801 |
++----------+
+
+select 1437801 / 1514278;
++-------------------+
+| 1437801 / 1514278 |
++-------------------+
+|            0.9495 |
++-------------------+
+
+select count(*) from mumps_match where ONS_UPRN = '';
++----------+
+| count(*) |
++----------+
+|     2256 |
++----------+
+
+select  "Discovery_Address",
+  "ONS_Score",
+  "ONS_ABP_Address",
+  "ONS_UPRN",
+  "ONS_Classification",
+  "Mumps_UPRN",
+  "Mumps_ABP_Address",
+  "Mumps_ID",
+  "Mumps_Algorithm",
+  "Mumps_Qualifier",
+  "Mumps_Table",
+  "Mumps_Key",
+  "Discovery_Line1",
+  "Discovery_Line2",
+  "Discovery_Line3",
+  "Discovery_Line4",
+  "Discovery_County",
+  "Discovery_Postcode"
+UNION
+select * from mumps_match where ONS_UPRN = ''
+INTO OUTFILE '/var/lib/mysql-files/mumps_match_ons_nomatch_.csv'
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n';
+
+select  "Discovery_Address",
+        "ONS_Score",
+        "ONS_ABP_Address",
+        "ONS_UPRN",
+        "ONS_Classification",
+        "Mumps_UPRN",
+        "Mumps_ABP_Address",
+        "Mumps_ID",
+        "Mumps_Algorithm",
+        "Mumps_Qualifier",
+        "Mumps_Table",
+        "Mumps_Key",
+        "Discovery_Line1",
+        "Discovery_Line2",
+        "Discovery_Line3",
+        "Discovery_Line4",
+        "Discovery_County",
+        "Discovery_Postcode"
+UNION
+select * from mumps_match where ONS_UPRN != Mumps_UPRN
+INTO OUTFILE '/var/lib/mysql-files/mumps_ons_different_uprn.csv'
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n';
+
+
+
+
 

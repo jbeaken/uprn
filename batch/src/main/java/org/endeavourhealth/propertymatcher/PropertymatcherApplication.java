@@ -48,7 +48,7 @@ final class CommandLineAppStartupRunner implements CommandLineRunner {
 
     String csvType;
 
-    final int counterStart = 0;
+    final int counterStart = 234_489;
     final int counterEnd = 500_000_000;
     final long start = System.currentTimeMillis();
 
