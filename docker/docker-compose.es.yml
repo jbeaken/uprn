@@ -1,0 +1,28 @@
+version: '3'
+services:
+  client:
+    image: client
+    environment:
+      - ONS_AI_UI_API_URI=http://server
+      - ONS_AI_UI_API_PORT=9001
+    ports:
+      - "9000:9000"
+  server:
+    image: server
+    environment:
+      - ONS_AI_API_ES_URI=elasticsearch
+      - ONS_AI_API_ES_PORT=9200
+      - ONS_AI_API_HYBRID_INDEX_SKINNY=hybrid-skinny_342_455_1551563547259
+      - ONS_AI_API_HYBRID_INDEX=hybrid_348_455_1551566576266
+    ports:
+      - "9001:9001"
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.6.1
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - /home/hal/dev/elasticsearch-6.6.1/data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200

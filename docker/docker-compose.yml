@@ -1,0 +1,18 @@
+version: '3'
+services:
+  client:
+    image: client
+    environment:
+      - ONS_AI_UI_API_URI=http://server
+      - ONS_AI_UI_API_PORT=9001
+    ports:
+      - "9000:9000"
+  server:
+    image: server
+    environment:
+      - ONS_AI_API_ES_URI=109.109.239.50
+      - ONS_AI_API_ES_PORT=9200
+      - ONS_AI_API_HYBRID_INDEX_SKINNY=hybrid-htrue-strue
+      - ONS_AI_API_HYBRID_INDEX=hybrid-htrue-sfalse
+    ports:
+      - "9001:9001"

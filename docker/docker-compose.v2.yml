@@ -1,0 +1,37 @@
+version: '2'
+networks:
+  blah:
+services:
+  server:
+    image: server
+    networks:
+      - blah
+    environment:
+      - ONS_AI_API_ES_URI=elasticsearch
+      - ONS_AI_API_ES_PORT=9200
+      - ONS_AI_API_HYBRID_INDEX_SKINNY=hybrid-hfalse-strue
+      - ONS_AI_API_HYBRID_INDEX=hybrid-htrue-strue
+      - ONS_AI_API_HYBRID_INDEX_HIST=hybrid-htrue-sfalse
+      - ONS_AI_API_HYBRID_INDEX_HIST_SKINNY=hybrid-htrue-strue
+    ports:
+      - "9001:9001"
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.6.8
+    networks:
+      blah:
+        aliases:
+          - elasticsearch
+    environment:
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
+      - node.store.allow_mmapfs=false
+      - index.store.type=niofs
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - /home/hal/dev/elasticsearch-5.6.7/data:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
